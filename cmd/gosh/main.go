@@ -1,31 +1,62 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"gosh/helpers"
+	"log"
 	"os"
+	"strings"
 )
 
 func main() {
-	var input string
+	inputReader := bufio.NewReader(os.Stdin)
 
 	fmt.Println("Welcome to Gosh")
 
 	for {
 		fmt.Print("> ")
-		fmt.Scanln(&input)
-		if input == "pwd" {
+		line, err := inputReader.ReadString('\n')
+		line = line[:len(line)-1]
+		if err != nil {
+			log.Fatal(err)
+		}
+		if line == "pwd" {
 			pwd, err := helpers.GetCurrDir()
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 				continue
 			}
 			fmt.Println(pwd)
-		} else if input == "exit" {
+		} else if line == "exit" {
 			fmt.Println("Goodbye!")
 			os.Exit(0)
+		} else if len(line) > 1 && line[0:2] == "cd" {
+			splitStr := strings.Split(line, " ")
+			if len(splitStr) != 2 {
+				fmt.Fprintf(os.Stderr, "Invalid cd command\n")
+				continue
+			}
+			if len(splitStr) == 1 {
+				fmt.Fprintf(os.Stderr, "error: %s\n", err)
+				continue
+			}
+			path := splitStr[1]
+			if path[0] != '/' {
+				currentDir, err := helpers.GetCurrDir()
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Failed to change dir\n")
+					continue
+				}
+				path = fmt.Sprintf("%s/%s", currentDir, path)
+			}
+			err = helpers.ChangeDir(path)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "error: %s\n", err)
+				continue
+			}
 		} else {
-			res := fmt.Sprintf("%s is not a valid command", input)
+			res := fmt.Sprintf("%s is not a valid command", line)
 			fmt.Println(res)
 		}
 	}
