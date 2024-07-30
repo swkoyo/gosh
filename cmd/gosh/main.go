@@ -11,11 +11,12 @@ import (
 
 func main() {
 	inputReader := bufio.NewReader(os.Stdin)
+	ps1 := helpers.GetPS1()
 
 	fmt.Println("Welcome to Gosh")
 
 	for {
-		fmt.Print("> ")
+		fmt.Print(ps1)
 		line, err := inputReader.ReadString('\n')
 		line = line[:len(line)-1]
 		if err != nil {
