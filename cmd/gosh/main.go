@@ -6,7 +6,9 @@ import (
 	"gosh/helpers"
 	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 func main() {
@@ -14,6 +16,19 @@ func main() {
 	ps1 := helpers.GetPS1()
 
 	fmt.Println("Welcome to Gosh")
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT)
+
+	go func() {
+		for {
+			sig := <-sigChan
+			if sig == syscall.SIGINT {
+				fmt.Println("\nReceieved SIGINT, exiting gracefully...")
+				os.Exit(0)
+			}
+		}
+	}()
 
 	for {
 		fmt.Print(ps1)

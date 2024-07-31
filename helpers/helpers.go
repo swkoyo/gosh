@@ -1,6 +1,9 @@
 package helpers
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func GetCurrDir() (string, error) {
 	return os.Getwd()
