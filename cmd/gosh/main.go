@@ -71,6 +71,11 @@ func main() {
 				fmt.Fprintf(os.Stderr, "error: %s\n", err)
 				continue
 			}
+		} else if strings.HasPrefix(line, "echo") {
+			parts := strings.SplitN(line, " ", 2)
+			if len(parts) > 1 {
+				fmt.Println(parts[1])
+			}
 		} else {
 			res := fmt.Sprintf("%s is not a valid command", line)
 			fmt.Println(res)
