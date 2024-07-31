@@ -47,17 +47,13 @@ func main() {
 		} else if line == "exit" {
 			fmt.Println("Goodbye!")
 			os.Exit(0)
-		} else if len(line) > 1 && line[0:2] == "cd" {
-			splitStr := strings.Split(line, " ")
-			if len(splitStr) != 2 {
+		} else if strings.HasPrefix(line, "cd") {
+			parts := strings.SplitN(line, " ", 2)
+			if len(parts) != 2 {
 				fmt.Fprintf(os.Stderr, "Invalid cd command\n")
 				continue
 			}
-			if len(splitStr) == 1 {
-				fmt.Fprintf(os.Stderr, "error: %s\n", err)
-				continue
-			}
-			path := splitStr[1]
+			path := parts[1]
 			if path[0] != '/' {
 				currentDir, err := helpers.GetCurrDir()
 				if err != nil {
