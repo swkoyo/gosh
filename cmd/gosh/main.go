@@ -77,6 +77,17 @@ func handleCommand(line string) {
 		if len(parts) > 1 {
 			fmt.Println(parts[1])
 		}
+	} else if line == "ls" {
+		files, err := os.ReadDir(".")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error: %s\n", err)
+			return
+		}
+		var filenames []string
+		for _, file := range files {
+			filenames = append(filenames, file.Name())
+		}
+		fmt.Println(strings.Join(filenames, "  "))
 	} else {
 		res := fmt.Sprintf("%s is not a valid command", line)
 		fmt.Println(res)
