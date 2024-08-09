@@ -156,6 +156,19 @@ func handleCommand(line string) {
 			filenames = append(filenames, file.Name())
 		}
 		fmt.Println(strings.Join(filenames, "  "))
+	} else if strings.HasPrefix(line, "cat") {
+		parts := strings.SplitN(line, " ", 2)
+		if len(parts) == 2 {
+			filename := parts[1]
+			data, err := os.ReadFile(filename)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "error: %s\n", err)
+				return
+			}
+			fmt.Print(string(data))
+		} else {
+			fmt.Println("Usage: cat <filename>")
+		}
 	} else {
 		res := fmt.Sprintf("%s is not a valid command", line)
 		fmt.Println(res)

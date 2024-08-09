@@ -1,1 +1,0 @@
-bin  cmd  echo  go.mod  go.sum  helpers  Makefile  README.md  txt
