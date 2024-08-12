@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"gosh/helpers"
+	"io"
 	"log"
 	"os"
 	"os/signal"
@@ -26,8 +27,7 @@ func main() {
 		for {
 			sig := <-sigChan
 			if sig == syscall.SIGINT {
-				fmt.Println("\nReceieved SIGINT, exiting gracefully...")
-				os.Exit(0)
+				fmt.Println("\nReceieved SIGINT (Ctrl+C), Pres Ctrl+D to exit, or continue with your command.")
 			}
 		}
 	}()
@@ -36,10 +36,14 @@ func main() {
 		for {
 			fmt.Print(ps1)
 			line, err := inputReader.ReadString('\n')
-			line = strings.TrimSpace(line)
 			if err != nil {
+				if err == io.EOF {
+					fmt.Println("\nRecieved EOF (Ctrl+D). Exiting Gosh...")
+					os.Exit(0)
+				}
 				log.Fatal(err)
 			}
+			line = strings.TrimSpace(line)
 			handleCommand(line)
 		}
 	} else {
@@ -49,6 +53,10 @@ func main() {
 			handleCommand(line)
 		}
 		if err := scanner.Err(); err != nil {
+			if err == io.EOF {
+				fmt.Println("\nRecieved EOF (Ctrl+D). Exiting Gosh...")
+				os.Exit(0)
+			}
 			log.Fatal(err)
 		}
 	}
