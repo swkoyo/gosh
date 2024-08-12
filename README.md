@@ -2,6 +2,9 @@
 
 Gosh is a simple shell program written in Go that supports basic command execution, input/output redirection, and signal handling. It's designed to be a lightweight and easy-to-use shell for learning and experimentation.
 
+## Demo
+https://github.com/user-attachments/assets/7311e350-8914-4fb7-b755-c6d161e3ff9a
+
 ## Features
 ### Basic Shell Commands:
 - `pwd`: Print the current working directory.
