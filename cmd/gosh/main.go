@@ -158,7 +158,15 @@ func handleCommand(line string) {
 		fmt.Println(strings.Join(filenames, "  "))
 	} else if strings.HasPrefix(line, "cat") {
 		parts := strings.SplitN(line, " ", 2)
-		if len(parts) == 2 {
+		if len(parts) == 1 {
+			scanner := bufio.NewScanner(os.Stdin)
+			for scanner.Scan() {
+				fmt.Println(scanner.Text())
+			}
+			if err := scanner.Err(); err != nil {
+				fmt.Fprintf(os.Stderr, "error: %s\n", err)
+			}
+		} else if len(parts) == 2 {
 			filename := parts[1]
 			data, err := os.ReadFile(filename)
 			if err != nil {
